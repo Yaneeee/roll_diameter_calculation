@@ -15,5 +15,5 @@ containers = {
 
 box = st.selectbox('选择柜子：',['20GP','40GP','40HQ','45HQ'])
 box_info = containers[box]
-LxWxH = '+'.join(box_info[0])
+LxWxH = '+'.join(i for i in box_info[0])
 st.write(LxWxH)
