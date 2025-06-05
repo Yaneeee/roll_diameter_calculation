@@ -1,19 +1,28 @@
 import streamlit as st
+from cal import calculate_diameter, calculate_length
 
-containers = {
-    # size: [(length, width, height),(door_height,door_width), weight]
-    # 尺寸：[(内长,内宽,内高),(门高,门宽)，重量]
+st.title('卷径计算')
 
-    # size unit: mm, weight unit: tons
-    # 尺寸单位：毫米，重量单位：吨
 
-    '20GP': [(5898,2352,2385),(2280,2340),18],
-    '40GP': [(12032,2352,2385),(2280,2340),26],
-    '40HQ': [(12032,2352,2690),(2585,2340),26],
-    '45HQ': [(13556,2352,2698),(2585,2340),29],
-}
+choice = st.radio('请选择：',['卷径计算','长度计算'],horizontal=True)
 
-box = st.selectbox('选择柜子：',['20GP','40GP','40HQ','45HQ'])
-box_info = containers[box]
-LxWxH = '+'.join(i for i in box_info[0])
-st.write(LxWxH)
+d0 = st.selectbox('纸管大小(英寸/inch):',[3,6])
+thickness = st.number_input('材料厚度(微米/μm):',min_value=10,step=5)
+
+
+if choice=='卷径计算':
+    # 已知长度厚度计算卷径
+    # st.write(choice)
+
+    length = st.number_input('长度(米/M):',step=10)
+    if length>0:
+        D = calculate_diameter(length,thickness,d0)
+        st.markdown(f'长度为{length}M的膜卷，卷径约: {D:.0f}cm')
+else:
+    # 已知卷径厚度计算长度
+    # st.write(choice)
+
+    D = st.number_input('卷径(厘米/cm):',min_value=d0*2.54)
+    if D>d0:
+        length = calculate_length(D,thickness,d0)
+        st.write(f'卷径为{D}cm的膜卷，长度约: {length:.0f}M')
