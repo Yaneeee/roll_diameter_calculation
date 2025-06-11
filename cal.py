@@ -15,10 +15,13 @@ def calculate_diameter(length_meters, thickness_microns, core_diameter_inches):
     # 单位转换
     length_cm = length_meters * 100  # 转换为厘米
     thickness_cm = thickness_microns / 10000  # 转换为厘米
-    core_radius_cm = core_diameter_inches * 2.54 / 2  # 转换为厘米
+    core_radius_cm = core_diameter_inches * 2.54 / 2 + 1.4 # 转换为厘米,纸管厚度
     
+    # 空隙系数
+    gap = 1.03
+
     # 计算卷径
-    term = (length_cm * thickness_cm) / math.pi
+    term = (length_cm * thickness_cm * gap) / math.pi
     diameter = 2 * math.sqrt(core_radius_cm ** 2 + term)
     
     return diameter
@@ -37,11 +40,14 @@ def calculate_length(diameter_cm, thickness_microns, core_diameter_inches):
     """
     # 单位转换
     thickness_cm = thickness_microns / 10000  # 转换为厘米
-    core_radius_cm = core_diameter_inches * 2.54 / 2  # 转换为厘米
+    core_radius_cm = core_diameter_inches * 2.54 / 2 + 1.4  # 转换为厘米
     outer_radius_cm = diameter_cm / 2  # 外半径（厘米）
+
+    # 空隙系数
+    gap = 1.03
     
     # 计算长度
-    length_cm = (math.pi * (outer_radius_cm ** 2 - core_radius_cm ** 2)) / thickness_cm
+    length_cm = (math.pi * (outer_radius_cm ** 2 - core_radius_cm ** 2)) / (thickness_cm * gap)
     length_meters = length_cm / 100  # 转换为米
     
     return length_meters
